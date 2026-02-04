@@ -3,163 +3,581 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Menu | Scan to Order</title>
+    <title>Hayat Hotel & Restaurant | Digital Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #c52c2c;
+            --secondary: #d97706;
+            --dark: #000000;
+            --light: #ffffff;
+            --gray: #222222;
+            --success: #10b981;
         }
         
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: var(--dark);
+            color: var(--light);
             line-height: 1.6;
+            padding-bottom: 80px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
         }
         
+        /* Header */
         header {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white;
-            padding: 20px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, #9c1f1f 100%);
+            padding: 15px 0;
             text-align: center;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(197, 44, 44, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        
+        .urdu-logo {
+            height: 60px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .restaurant-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .address {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            color: #ffd8d8;
+        }
+        
+        .whatsapp-link {
+            font-size: 0.9rem;
+            color: #25D366;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        /* Scanner Instruction */
         .scanner-instruction {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed var(--primary);
             border-radius: 10px;
             padding: 15px;
             margin: 20px 0;
             text-align: center;
+            font-size: 0.9rem;
+            color: #ffd8d8;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Categories */
+        .categories-container {
+            margin: 20px 0;
+            position: sticky;
+            top: 180px;
+            background: var(--gray);
+            z-index: 90;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.5);
+            padding: 10px;
         }
         
         .categories {
             display: flex;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
             overflow-x: auto;
             padding: 10px 0;
+            scrollbar-width: none;
+        }
+        
+        .categories::-webkit-scrollbar {
+            display: none;
         }
         
         .category-btn {
-            padding: 10px 20px;
-            background: white;
-            border: 2px solid #25D366;
+            padding: 10px 18px;
+            background: #333;
+            border: 2px solid var(--primary);
             border-radius: 25px;
             cursor: pointer;
             white-space: nowrap;
             font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
             transition: all 0.3s;
         }
         
         .category-btn.active {
-            background: #25D366;
+            background: var(--primary);
             color: white;
+            transform: scale(1.05);
         }
         
+        .category-btn i {
+            margin-right: 5px;
+        }
+        
+        /* Menu Items */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
-            margin: 30px 0;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         .menu-item {
-            background: white;
+            background: var(--gray);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            border: 1px solid #444;
         }
         
         .menu-item:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(197, 44, 44, 0.2);
         }
         
-        .item-image {
+        .item-image-placeholder {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 120px;
+            background: linear-gradient(135deg, #333, #444);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .item-image-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(197, 44, 44, 0.1) 50%, transparent 70%);
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .item-icon {
+            margin-bottom: 10px;
         }
         
         .item-info {
             padding: 20px;
         }
         
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
         .item-title {
             font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #2d3436;
+            font-weight: 700;
+            color: white;
+            flex: 1;
         }
         
-        .item-price {
-            color: #25D366;
+        .urdu-name {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            font-size: 1.4rem;
+            color: #ff9999;
+            margin-top: 5px;
+            line-height: 1.4;
+            direction: rtl;
+        }
+        
+        .favorite-btn {
+            background: none;
+            border: none;
             font-size: 1.3rem;
+            color: #444;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        
+        .favorite-btn.active {
+            color: var(--primary);
+        }
+        
+        .item-description {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            min-height: 40px;
+        }
+        
+        .starting-price {
+            color: var(--primary);
+            font-size: 1.1rem;
             font-weight: 700;
             margin: 10px 0;
+            text-align: center;
+            background: rgba(197, 44, 44, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px dashed var(--primary);
         }
         
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
+        .starting-price .price {
+            font-size: 1.3rem;
+            color: #ff9999;
         }
         
-        .qty-btn {
-            width: 35px;
-            height: 35px;
-            border: none;
-            background: #25D366;
+        .add-to-cart-btn {
+            background: var(--primary);
             color: white;
-            border-radius: 50%;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
+            transition: background 0.3s;
+            margin-top: 15px;
         }
         
+        .add-to-cart-btn:hover {
+            background: #9c1f1f;
+            transform: translateY(-2px);
+        }
+        
+        /* Options Modal */
+        .options-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .options-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--gray);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border: 2px solid var(--primary);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+        
+        .options-modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #444;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .modal-urdu {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            font-size: 1.3rem;
+            color: #ff9999;
+            text-align: center;
+            margin: 10px 0;
+            direction: rtl;
+        }
+        
+        .options-list {
+            margin: 20px 0;
+        }
+        
+        .option-item {
+            background: #333;
+            border: 2px solid #444;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .option-item:hover {
+            border-color: var(--primary);
+            background: #3a3a3a;
+        }
+        
+        .option-item.selected {
+            border-color: var(--primary);
+            background: rgba(197, 44, 44, 0.2);
+        }
+        
+        .option-name {
+            font-weight: 600;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .option-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn.cancel {
+            background: #444;
+            color: #aaa;
+        }
+        
+        .modal-btn.confirm {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Cart Sidebar */
         .cart-sidebar {
             position: fixed;
             right: 0;
             top: 0;
-            width: 350px;
+            width: 100%;
+            max-width: 400px;
             height: 100vh;
-            background: white;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+            background: var(--gray);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.7);
             padding: 20px;
             transform: translateX(100%);
             transition: transform 0.3s;
             z-index: 1000;
+            overflow-y: auto;
         }
         
         .cart-sidebar.active {
             transform: translateX(0);
         }
         
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #444;
+        }
+        
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #aaa;
+            cursor: pointer;
+        }
+        
         .cart-items {
-            max-height: 60vh;
+            max-height: 50vh;
             overflow-y: auto;
             margin: 20px 0;
+        }
+        
+        .cart-item {
+            background: #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .cart-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .cart-item-name {
+            font-weight: 700;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .cart-item-options {
+            font-size: 0.9rem;
+            color: #ff9999;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cart-qty-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .cart-total {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #25D366;
-            margin: 20px 0;
+            color: var(--primary);
+            margin: 25px 0;
             text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #444;
+        }
+        
+        /* Customer Info Form */
+        .customer-info {
+            background: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: #444;
+            border: 2px solid #555;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: white;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
         }
         
         .whatsapp-submit {
@@ -176,63 +594,96 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 20px;
             transition: background 0.3s;
         }
         
         .whatsapp-submit:hover {
-            background: #128C7E;
+            background: #1da851;
         }
         
+        /* Cart Toggle */
         .cart-toggle {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: #25D366;
+            background: var(--primary);
             color: white;
             border: none;
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 4px 20px rgba(197, 44, 44, 0.5);
             z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
         }
         
-        @media (max-width: 768px) {
-            .menu-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-            
-            .cart-sidebar {
-                width: 100%;
-            }
+        .cart-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .cart-count {
+            font-size: 0.8rem;
+            background: white;
+            color: var(--primary);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-weight: 700;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #aaa;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #444;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>🍽️ Restaurant Menu</h1>
-            <p>Scan QR Code • Browse Menu • Order via WhatsApp</p>
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/HayatHotel/restaurant-menu-order/2e5a211dca888ff6c04880b2db970e84674a7682/URDU-LOGO.png" 
+                     alt="Hayat Hotel Urdu Logo" class="urdu-logo">
+                <div>
+                    <div class="restaurant-name">HAYAT HOTEL & RESTAURANT</div>
+                    <div class="address">Saboon Chock, Mela Ground, Hayat Tower</div>
+                    <div class="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i> +923219746660
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
     <div class="container">
         <div class="scanner-instruction">
-            <h3>📱 How to Order:</h3>
-            <p>1. Scan this QR code with your phone camera</p>
-            <p>2. Browse menu and add items to cart</p>
-            <p>3. Submit order directly to our WhatsApp</p>
+            <i class="fas fa-qrcode"></i> Scan QR Code • <i class="fas fa-utensils"></i> Select Items • 
+            <i class="fas fa-shopping-cart"></i> Add to Cart • <i class="fab fa-whatsapp"></i> Submit Order
         </div>
 
-        <div class="categories">
-            <button class="category-btn active" data-category="all">All Items</button>
-            <button class="category-btn" data-category="appetizers">Appetizers</button>
-            <button class="category-btn" data-category="main-course">Main Course</button>
-            <button class="category-btn" data-category="desserts">Desserts</button>
-            <button class="category-btn" data-category="beverages">Beverages</button>
+        <div class="categories-container">
+            <div class="categories" id="categories">
+                <!-- Categories will be loaded here -->
+            </div>
         </div>
 
         <div class="menu-grid" id="menuItems">
@@ -240,133 +691,1465 @@
         </div>
     </div>
 
+    <!-- Options Selection Modal -->
+    <div class="options-modal" id="optionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalItemName">Select Option</div>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-urdu" id="modalUrduName"></div>
+            <div class="options-list" id="optionsList">
+                <!-- Options will be loaded here -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelOption">Cancel</button>
+                <button class="modal-btn confirm" id="confirmOption">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cartSidebar">
-        <h2>🛒 Your Order</h2>
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart"></i> Your Order</h2>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
         <div class="cart-items" id="cartItems">
             <!-- Cart items will appear here -->
         </div>
+        
         <div class="cart-total">
-            Total: $<span id="totalAmount">0.00</span>
+            Total: Rs. <span id="totalAmount">0</span>
         </div>
+        
+        <div class="customer-info">
+            <h3><i class="fas fa-user"></i> Delivery Details</h3>
+            <div class="form-group">
+                <label for="customerName">Your Name *</label>
+                <input type="text" id="customerName" class="form-control" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="roomNumber">Room Number / Table *</label>
+                <input type="text" id="roomNumber" class="form-control" placeholder="e.g., Room 101 or Table 5" required>
+            </div>
+            <div class="form-group">
+                <label for="specialInstructions">Special Instructions</label>
+                <textarea id="specialInstructions" class="form-control" rows="3" placeholder="Any special requests or instructions"></textarea>
+            </div>
+        </div>
+        
         <button class="whatsapp-submit" id="submitOrder">
-            <span>📱 Send Order via WhatsApp</span>
+            <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
         </button>
     </div>
 
     <button class="cart-toggle" id="cartToggle">
-        🛒 <span id="cartCount">0</span>
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
     </button>
 
     <script>
-        // Menu Data - Replace with your actual items
+        // Your WhatsApp number
+        const WHATSAPP_NUMBER = "923219746660";
+        
+        // Icons for different food categories
+        const categoryIcons = {
+            "pakistani": "fas fa-utensils",
+            "tandoor": "fas fa-bread-slice",
+            "chinese": "fas fa-utensil-spoon",
+            "sweets-salads": "fas fa-ice-cream",
+            "bbq": "fas fa-drumstick-bite",
+            "fast-food": "fas fa-hamburger",
+            "pizzas": "fas fa-pizza-slice",
+            "fav": "fas fa-heart"
+        };
+        
+        // Complete Menu Data with Urdu names and lowest prices
         const menuData = [
+            // ==================== FAVORITES (Empty initially) ====================
+        
+            // ==================== PAKISTANI DISHES ====================
             {
                 id: 1,
-                name: "Classic Burger",
-                category: "main-course",
-                price: 12.99,
-                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop",
-                description: "Juicy beef patty with fresh veggies"
+                name: "Chicken Musallam",
+                urduName: "مرغ مسلم",
+                category: "pakistani",
+                options: {
+                    "Full": 2200
+                },
+                description: "Whole chicken cooked with traditional spices",
+                lowestPrice: 2200
             },
             {
                 id: 2,
-                name: "Caesar Salad",
-                category: "appetizers",
-                price: 8.99,
-                image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
-                description: "Fresh romaine with Caesar dressing"
+                name: "Chicken Karahi White",
+                urduName: "مرغ کڑاہی سفید",
+                category: "pakistani",
+                options: {
+                    "Half": 1000,
+                    "Full": 1900
+                },
+                description: "Traditional white karahi with aromatic spices",
+                lowestPrice: 1000
             },
             {
                 id: 3,
-                name: "Chocolate Cake",
-                category: "desserts",
-                price: 6.99,
-                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w-400&h=300&fit=crop",
-                description: "Rich chocolate layered cake"
+                name: "Chicken Karahi Red",
+                urduName: "مرغ کڑاہی سرخ",
+                category: "pakistani",
+                options: {
+                    "Half": 1000,
+                    "Full": 1900
+                },
+                description: "Spicy red karahi with tomatoes and herbs",
+                lowestPrice: 1000
             },
             {
                 id: 4,
-                name: "Fresh Lemonade",
-                category: "beverages",
-                price: 3.99,
-                image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop",
-                description: "Freshly squeezed lemonade"
+                name: "Chicken Karahi Achari",
+                urduName: "مرغ کڑاہی اچاری",
+                category: "pakistani",
+                options: {
+                    "Half": 1100,
+                    "Full": 2000
+                },
+                description: "Pickle flavored karahi with tangy taste",
+                lowestPrice: 1100
             },
             {
                 id: 5,
-                name: "Margherita Pizza",
-                category: "main-course",
-                price: 14.99,
-                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop",
-                description: "Classic tomato and mozzarella"
+                name: "Chicken Handi White",
+                urduName: "مرغ ہانڈی سفید",
+                category: "pakistani",
+                options: {
+                    "Half": 1100,
+                    "Full": 2000
+                },
+                description: "Creamy white handi cooked in clay pot",
+                lowestPrice: 1100
             },
             {
                 id: 6,
-                name: "Garlic Bread",
-                category: "appetizers",
-                price: 5.99,
-                image: "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=400&h=300&fit=crop",
-                description: "Toasted bread with garlic butter"
+                name: "Chicken Handi Red",
+                urduName: "مرغ ہانڈی سرخ",
+                category: "pakistani",
+                options: {
+                    "Half": 1100,
+                    "Full": 2000
+                },
+                description: "Spicy red handi with rich gravy",
+                lowestPrice: 1100
+            },
+            {
+                id: 7,
+                name: "Chicken Handi Achari",
+                urduName: "مرغ ہانڈی اچاری",
+                category: "pakistani",
+                options: {
+                    "Half": 1150,
+                    "Full": 2050
+                },
+                description: "Pickle style handi with special masala",
+                lowestPrice: 1150
+            },
+            {
+                id: 8,
+                name: "Chicken Handi Jalfrezi",
+                urduName: "مرغ ہانڈی جالفرازی",
+                category: "pakistani",
+                options: {
+                    "Half": 1150,
+                    "Full": 2050
+                },
+                description: "Jalfrezi style with bell peppers and onions",
+                lowestPrice: 1150
+            },
+            {
+                id: 9,
+                name: "Mutton Shinwari Karahi",
+                urduName: "مٹن شنواری کڑاہی",
+                category: "pakistani",
+                options: {
+                    "Half": 1600,
+                    "Full": 3200
+                },
+                description: "Shinwari style mutton karahi from Peshawar",
+                lowestPrice: 1600
+            },
+            {
+                id: 10,
+                name: "Mutton Sulamani Karahi",
+                urduName: "مٹن سلیمانی کڑاہی",
+                category: "pakistani",
+                options: {
+                    "Half": 1600,
+                    "Full": 3200
+                },
+                description: "Sulamani style with rich gravy",
+                lowestPrice: 1600
+            },
+            {
+                id: 11,
+                name: "Afghan Tikka Karahi",
+                urduName: "افغانی تکہ کڑاہی",
+                category: "pakistani",
+                options: {
+                    "Full": 1600
+                },
+                description: "Afghan style tikka cooked in karahi",
+                lowestPrice: 1600
+            },
+            {
+                id: 12,
+                name: "Beef Shinwari Karahi",
+                urduName: "بیف شنواری کڑاہی",
+                category: "pakistani",
+                options: {
+                    "Half": 1200,
+                    "Full": 2400
+                },
+                description: "Shinwari style beef karahi",
+                lowestPrice: 1200
+            },
+            {
+                id: 13,
+                name: "Namkeen Rosh",
+                urduName: "نمکین روش",
+                category: "pakistani",
+                options: {
+                    "Full": 700
+                },
+                description: "Traditional salty meat curry",
+                lowestPrice: 700
+            },
+            {
+                id: 14,
+                name: "Chicken Tandoori Masala",
+                urduName: "مرغ تندوری مسالہ",
+                category: "pakistani",
+                options: {
+                    "Half": 600,
+                    "Full": 1200
+                },
+                description: "Tandoori chicken pieces in spicy masala",
+                lowestPrice: 600
+            },
+            {
+                id: 15,
+                name: "Seekh Kabab Masala",
+                urduName: "سیخ کباب مسالہ",
+                category: "pakistani",
+                options: {
+                    "Half": 600,
+                    "Full": 1200
+                },
+                description: "Seekh kababs cooked in rich curry",
+                lowestPrice: 600
+            },
+            {
+                id: 16,
+                name: "Dal Mash",
+                urduName: "دال ماش",
+                category: "pakistani",
+                options: {
+                    "Standard": 300
+                },
+                description: "Traditional black lentils cooked overnight",
+                lowestPrice: 300
+            },
+            {
+                id: 17,
+                name: "Mix Vegetable",
+                urduName: "مکس سبزی",
+                category: "pakistani",
+                options: {
+                    "Standard": 300
+                },
+                description: "Fresh seasonal vegetables in light curry",
+                lowestPrice: 300
+            },
+            {
+                id: 18,
+                name: "Chicken Biryani",
+                urduName: "مرغ بریانی",
+                category: "pakistani",
+                options: {
+                    "Half": 300,
+                    "Full": 550
+                },
+                description: "Traditional Hyderabadi style biryani",
+                lowestPrice: 300
+            },
+            {
+                id: 19,
+                name: "Kabuli Paluo",
+                urduName: "کابلی پلاؤ",
+                category: "pakistani",
+                options: {
+                    "Half": 300,
+                    "Full": 700
+                },
+                description: "Afghan rice with raisins, carrots and nuts",
+                lowestPrice: 300
+            },
+            
+            // ==================== TANDOOR ====================
+            {
+                id: 20,
+                name: "Roti",
+                urduName: "روٹی",
+                category: "tandoor",
+                options: {
+                    "Standard": 30
+                },
+                description: "Fresh whole wheat bread",
+                lowestPrice: 30
+            },
+            {
+                id: 21,
+                name: "Nan",
+                urduName: "نان",
+                category: "tandoor",
+                options: {
+                    "Standard": 40
+                },
+                description: "Traditional tandoori naan",
+                lowestPrice: 40
+            },
+            {
+                id: 22,
+                name: "Roghani Nan",
+                urduName: "روغنی نان",
+                category: "tandoor",
+                options: {
+                    "Standard": 80
+                },
+                description: "Naan brushed with butter",
+                lowestPrice: 80
+            },
+            {
+                id: 23,
+                name: "Kalwanji Nan",
+                urduName: "کلونجی نان",
+                category: "tandoor",
+                options: {
+                    "Standard": 80
+                },
+                description: "Naan topped with nigella seeds",
+                lowestPrice: 80
+            },
+            {
+                id: 24,
+                name: "Parata",
+                urduName: "پراٹھا",
+                category: "tandoor",
+                options: {
+                    "Standard": 80
+                },
+                description: "Layered flatbread",
+                lowestPrice: 80
+            },
+            {
+                id: 25,
+                name: "Garlic Nan",
+                urduName: "لہسن نان",
+                category: "tandoor",
+                options: {
+                    "Standard": 100
+                },
+                description: "Naan topped with garlic and butter",
+                lowestPrice: 100
+            },
+            {
+                id: 26,
+                name: "Qeema Nan",
+                urduName: "قیمہ نان",
+                category: "tandoor",
+                options: {
+                    "Standard": 250
+                },
+                description: "Naan stuffed with minced meat",
+                lowestPrice: 250
+            },
+            {
+                id: 27,
+                name: "Alu Nan",
+                urduName: "آلو نان",
+                category: "tandoor",
+                options: {
+                    "Standard": 150
+                },
+                description: "Naan stuffed with spiced potatoes",
+                lowestPrice: 150
+            },
+            {
+                id: 28,
+                name: "Mix Basket",
+                urduName: "مکس ٹوکری",
+                category: "tandoor",
+                options: {
+                    "Standard": 350
+                },
+                description: "Roghani, Kalwanji, Garlic, Parata, Plain Nan, Roti",
+                lowestPrice: 350
+            },
+            
+            // ==================== CHINESE ====================
+            {
+                id: 29,
+                name: "Chicken Chowmein",
+                urduName: "مرغ چاؤمین",
+                category: "chinese",
+                options: {
+                    "Standard": 750
+                },
+                description: "Stir-fried noodles with chicken and vegetables",
+                lowestPrice: 750
+            },
+            {
+                id: 30,
+                name: "Vegetable Chowmein",
+                urduName: "سبزی چاؤمین",
+                category: "chinese",
+                options: {
+                    "Standard": 550
+                },
+                description: "Stir-fried noodles with fresh vegetables",
+                lowestPrice: 550
+            },
+            {
+                id: 31,
+                name: "Hayat Special Rice",
+                urduName: "حیات اسپیشل رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 700
+                },
+                description: "Special fried rice with chicken and prawns",
+                lowestPrice: 700
+            },
+            {
+                id: 32,
+                name: "Chicken Rice",
+                urduName: "مرغ رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 600
+                },
+                description: "Chicken fried rice with eggs",
+                lowestPrice: 600
+            },
+            {
+                id: 33,
+                name: "Vegetable Rice",
+                urduName: "سبزی رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 450
+                },
+                description: "Vegetable fried rice",
+                lowestPrice: 450
+            },
+            {
+                id: 34,
+                name: "Hayat Special Gravy with Rice",
+                urduName: "حیات اسپیشل گریوی رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 1200
+                },
+                description: "Special gravy served with rice",
+                lowestPrice: 1200
+            },
+            {
+                id: 35,
+                name: "Mongolian Chicken with Rice",
+                urduName: "منگولین مرغ رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 1000
+                },
+                description: "Mongolian style chicken with rice",
+                lowestPrice: 1000
+            },
+            {
+                id: 36,
+                name: "Chicken Manchurian with Rice",
+                urduName: "مرغ منچورین رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 1000
+                },
+                description: "Chicken manchurian with fried rice",
+                lowestPrice: 1000
+            },
+            {
+                id: 37,
+                name: "Beef Chilli Dry with Rice",
+                urduName: "بیف چلی ڈرائی رائس",
+                category: "chinese",
+                options: {
+                    "Standard": 1200
+                },
+                description: "Dry chilli beef with rice",
+                lowestPrice: 1200
+            },
+            {
+                id: 38,
+                name: "Hayat Special Soup",
+                urduName: "حیات اسپیشل سوپ",
+                category: "chinese",
+                options: {
+                    "Single": 300,
+                    "Half": 600,
+                    "Full": 1200
+                },
+                description: "Special soup with chicken and vegetables",
+                lowestPrice: 300
+            },
+            {
+                id: 39,
+                name: "Chicken Corn Soup",
+                urduName: "مرغ کارن سوپ",
+                category: "chinese",
+                options: {
+                    "Single": 250,
+                    "Half": 500,
+                    "Full": 1000
+                },
+                description: "Chicken and sweet corn soup",
+                lowestPrice: 250
+            },
+            {
+                id: 40,
+                name: "Hot & Sour Soup",
+                urduName: "ہاٹ اینڈ ساور سوپ",
+                category: "chinese",
+                options: {
+                    "Single": 250,
+                    "Half": 500,
+                    "Full": 1000
+                },
+                description: "Spicy and tangy soup",
+                lowestPrice: 250
+            },
+            {
+                id: 41,
+                name: "Vegetable Soup",
+                urduName: "سبزی سوپ",
+                category: "chinese",
+                options: {
+                    "Single": 200,
+                    "Half": 400,
+                    "Full": 800
+                },
+                description: "Fresh vegetable soup",
+                lowestPrice: 200
+            },
+            {
+                id: 42,
+                name: "Chicken Penne Pasta",
+                urduName: "مرغ پینی پاستا",
+                category: "chinese",
+                options: {
+                    "Standard": 800
+                },
+                description: "Penne pasta with chicken in white sauce",
+                lowestPrice: 800
+            },
+            {
+                id: 43,
+                name: "Alfredo Pasta",
+                urduName: "الفریڈو پاستا",
+                category: "chinese",
+                options: {
+                    "Standard": 800
+                },
+                description: "Creamy alfredo pasta",
+                lowestPrice: 800
+            },
+            {
+                id: 44,
+                name: "Mexican Steak Beef",
+                urduName: "میکسیکن سٹیک بیف",
+                category: "chinese",
+                options: {
+                    "Standard": 1600
+                },
+                description: "Mexican style beef steak",
+                lowestPrice: 1600
+            },
+            {
+                id: 45,
+                name: "Mexican Steak Chicken",
+                urduName: "میکسیکن سٹیک مرغ",
+                category: "chinese",
+                options: {
+                    "Standard": 1400
+                },
+                description: "Mexican style chicken steak",
+                lowestPrice: 1400
+            },
+            {
+                id: 46,
+                name: "Mushroom Steak Beef",
+                urduName: "مشرووم سٹیک بیف",
+                category: "chinese",
+                options: {
+                    "Standard": 1600
+                },
+                description: "Beef steak with mushroom sauce",
+                lowestPrice: 1600
+            },
+            {
+                id: 47,
+                name: "Mushroom Steak Chicken",
+                urduName: "مشرووم سٹیک مرغ",
+                category: "chinese",
+                options: {
+                    "Standard": 1400
+                },
+                description: "Chicken steak with mushroom sauce",
+                lowestPrice: 1400
+            },
+            
+            // ==================== SWEETS & SALADS ====================
+            {
+                id: 48,
+                name: "Raita",
+                urduName: "رائتہ",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 100
+                },
+                description: "Yogurt with cucumber and mint",
+                lowestPrice: 100
+            },
+            {
+                id: 49,
+                name: "Fresh Salad",
+                urduName: "تازہ سلاد",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 100
+                },
+                description: "Fresh vegetable salad",
+                lowestPrice: 100
+            },
+            {
+                id: 50,
+                name: "Russian Salad",
+                urduName: "رشین سلاد",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 500
+                },
+                description: "Potato, vegetable and mayonnaise salad",
+                lowestPrice: 500
+            },
+            {
+                id: 51,
+                name: "Chicken Salad",
+                urduName: "مرغ سلاد",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 400
+                },
+                description: "Chicken with fresh vegetables",
+                lowestPrice: 400
+            },
+            {
+                id: 52,
+                name: "Kachumber Salad",
+                urduName: "کچمبر سلاد",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 300
+                },
+                description: "Traditional cucumber and tomato salad",
+                lowestPrice: 300
+            },
+            {
+                id: 53,
+                name: "Hayat Special Ice Cream",
+                urduName: "حیات اسپیشل آئس کریم",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 250
+                },
+                description: "Special homemade ice cream",
+                lowestPrice: 250
+            },
+            {
+                id: 54,
+                name: "Lab E Sherien",
+                urduName: "لب شیریں",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 300
+                },
+                description: "Traditional vermicelli milk pudding",
+                lowestPrice: 300
+            },
+            {
+                id: 55,
+                name: "Hayat Special Kheer",
+                urduName: "حیات اسپیشل کھیر",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 200
+                },
+                description: "Special rice pudding",
+                lowestPrice: 200
+            },
+            {
+                id: 56,
+                name: "Custard",
+                urduName: "کسٹرڈ",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 150
+                },
+                description: "Vanilla custard with fruits",
+                lowestPrice: 150
+            },
+            {
+                id: 57,
+                name: "Banana Shake",
+                urduName: "کیلا شیک",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 250
+                },
+                description: "Fresh banana milkshake",
+                lowestPrice: 250
+            },
+            {
+                id: 58,
+                name: "Apple Shake",
+                urduName: "سیب شیک",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 250
+                },
+                description: "Fresh apple milkshake",
+                lowestPrice: 250
+            },
+            {
+                id: 59,
+                name: "Strawberry Shake",
+                urduName: "اسٹرابیری شیک",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 300
+                },
+                description: "Fresh strawberry milkshake",
+                lowestPrice: 300
+            },
+            {
+                id: 60,
+                name: "Mango Shake",
+                urduName: "آم شیک",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 250
+                },
+                description: "Fresh mango milkshake",
+                lowestPrice: 250
+            },
+            {
+                id: 61,
+                name: "Ice Cream Shake",
+                urduName: "آئس کریم شیک",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 300
+                },
+                description: "Ice cream blended milkshake",
+                lowestPrice: 300
+            },
+            {
+                id: 62,
+                name: "Green Tea",
+                urduName: "گرین ٹی",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 50
+                },
+                description: "Hot green tea",
+                lowestPrice: 50
+            },
+            {
+                id: 63,
+                name: "Chai",
+                urduName: "چائے",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 120
+                },
+                description: "Traditional Pakistani tea",
+                lowestPrice: 120
+            },
+            {
+                id: 64,
+                name: "Namkeen Lassi",
+                urduName: "نمکین لسی",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 150
+                },
+                description: "Salty yogurt drink",
+                lowestPrice: 150
+            },
+            {
+                id: 65,
+                name: "Sweet Lassi",
+                urduName: "میٹھی لسی",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 150
+                },
+                description: "Sweet yogurt drink",
+                lowestPrice: 150
+            },
+            {
+                id: 66,
+                name: "Mint Margarita",
+                urduName: "مینٹ مارگریٹا",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 200
+                },
+                description: "Mint lemonade",
+                lowestPrice: 200
+            },
+            {
+                id: 67,
+                name: "Lemonade",
+                urduName: "لیموں پانی",
+                category: "sweets-salads",
+                options: {
+                    "Standard": 250
+                },
+                description: "Fresh lemonade",
+                lowestPrice: 250
+            },
+            
+            // ==================== BBQ ====================
+            {
+                id: 68,
+                name: "Whole Lamb Sajji",
+                urduName: "مکمل لیمب سجی",
+                category: "bbq",
+                options: {
+                    "Per Kg": 3200
+                },
+                description: "Per kg - Whole lamb sajji",
+                lowestPrice: 3200
+            },
+            {
+                id: 69,
+                name: "Chicken Tikka",
+                urduName: "مرغ تکہ",
+                category: "bbq",
+                options: {
+                    "8 Pieces": 450
+                },
+                description: "8 pieces - Boneless chicken tikka",
+                lowestPrice: 450
+            },
+            {
+                id: 70,
+                name: "Chicken Boti",
+                urduName: "مرغ بوٹی",
+                category: "bbq",
+                options: {
+                    "8 Pieces": 900
+                },
+                description: "8 pieces - Chicken boti",
+                lowestPrice: 900
+            },
+            {
+                id: 71,
+                name: "Malai Boti",
+                urduName: "ملائی بوٹی",
+                category: "bbq",
+                options: {
+                    "8 Pieces": 1050
+                },
+                description: "8 pieces - Creamy malai boti",
+                lowestPrice: 1050
+            },
+            {
+                id: 72,
+                name: "Kastori Boti",
+                urduName: "کستوری بوٹی",
+                category: "bbq",
+                options: {
+                    "8 Pieces": 1100
+                },
+                description: "8 pieces - Kastori masala boti",
+                lowestPrice: 1100
+            },
+            {
+                id: 73,
+                name: "Drum Stick",
+                urduName: "ڈرم سٹک",
+                category: "bbq",
+                options: {
+                    "6 Pieces": 1200
+                },
+                description: "6 pieces - Chicken drumsticks",
+                lowestPrice: 1200
+            },
+            {
+                id: 74,
+                name: "Seekh Kabab",
+                urduName: "سیخ کباب",
+                category: "bbq",
+                options: {
+                    "Standard": 850
+                },
+                description: "Minced meat kabab on skewer",
+                lowestPrice: 850
+            },
+            {
+                id: 75,
+                name: "Reshmi Kabab",
+                urduName: "ریشمی کباب",
+                category: "bbq",
+                options: {
+                    "Standard": 800
+                },
+                description: "Silky smooth chicken kabab",
+                lowestPrice: 800
+            },
+            {
+                id: 76,
+                name: "Afghani Seekh Tikka",
+                urduName: "افغانی سیخ تکہ",
+                category: "bbq",
+                options: {
+                    "Standard": 1400
+                },
+                description: "Afghan style seekh tikka",
+                lowestPrice: 1400
+            },
+            {
+                id: 77,
+                name: "Fish Tikka",
+                urduName: "فش تکہ",
+                category: "bbq",
+                options: {
+                    "8 Pieces": 1600
+                },
+                description: "8 pieces - Marinated fish tikka",
+                lowestPrice: 1600
+            },
+            {
+                id: 78,
+                name: "Grill Fish",
+                urduName: "گرل فش",
+                category: "bbq",
+                options: {
+                    "Standard": 1200
+                },
+                description: "Whole grilled fish",
+                lowestPrice: 1200
+            },
+            {
+                id: 79,
+                name: "Grill Chicken with Rice",
+                urduName: "گرل مرغ رائس",
+                category: "bbq",
+                options: {
+                    "Standard": 1800
+                },
+                description: "Grilled chicken served with rice",
+                lowestPrice: 1800
+            },
+            {
+                id: 80,
+                name: "DEGI Chicken Charga with Rice",
+                urduName: "دیگی مرغ چرغہ رائس",
+                category: "bbq",
+                options: {
+                    "Standard": 1800
+                },
+                description: "DEGI style chicken charga with rice",
+                lowestPrice: 1800
+            },
+            {
+                id: 81,
+                name: "Mutton Namkeen Tikka",
+                urduName: "مٹن نمکین تکہ",
+                category: "bbq",
+                options: {
+                    "Standard": 3250
+                },
+                description: "Salty mutton tikka",
+                lowestPrice: 3250
+            },
+            {
+                id: 82,
+                name: "BBQ Special Platter",
+                urduName: "بی بی کیو اسپیشل پلیٹر",
+                category: "bbq",
+                options: {
+                    "Quarter": 2200,
+                    "Half": 4800,
+                    "Full": 8000
+                },
+                description: "Assorted BBQ items platter",
+                lowestPrice: 2200
+            },
+            {
+                id: 83,
+                name: "BBQ Grand Platter",
+                urduName: "بی بی کیو گرانڈ پلیٹر",
+                category: "bbq",
+                options: {
+                    "Half": 7000,
+                    "Full": 12000
+                },
+                description: "Grand assorted BBQ platter",
+                lowestPrice: 7000
+            },
+            
+            // ==================== FAST FOOD ====================
+            {
+                id: 84,
+                name: "Chicken Broast",
+                urduName: "مرغ بروسٹ",
+                category: "fast-food",
+                options: {
+                    "Half": 900,
+                    "Full": 1800
+                },
+                description: "Crispy fried chicken",
+                lowestPrice: 900
+            },
+            {
+                id: 85,
+                name: "Finger Fish",
+                urduName: "فنگر فش",
+                category: "fast-food",
+                options: {
+                    "Half": 650,
+                    "Full": 1300
+                },
+                description: "6 pieces - Fish fingers",
+                lowestPrice: 650
+            },
+            {
+                id: 86,
+                name: "Finger Chicken",
+                urduName: "فنگر مرغ",
+                category: "fast-food",
+                options: {
+                    "Half": 500,
+                    "Full": 1000
+                },
+                description: "6 pieces - Chicken fingers",
+                lowestPrice: 500
+            },
+            {
+                id: 87,
+                name: "Fries",
+                urduName: "فرائز",
+                category: "fast-food",
+                options: {
+                    "Standard": 200
+                },
+                description: "French fries",
+                lowestPrice: 200
+            },
+            {
+                id: 88,
+                name: "Loaded Fries",
+                urduName: "لوڈڈ فرائز",
+                category: "fast-food",
+                options: {
+                    "Standard": 350
+                },
+                description: "Fries with cheese and toppings",
+                lowestPrice: 350
+            },
+            {
+                id: 89,
+                name: "Shawarma",
+                urduName: "شاورما",
+                category: "fast-food",
+                options: {
+                    "Standard": 200
+                },
+                description: "Chicken shawarma roll",
+                lowestPrice: 200
+            },
+            {
+                id: 90,
+                name: "Chicken Burger",
+                urduName: "مرغ برگر",
+                category: "fast-food",
+                options: {
+                    "Standard": 350
+                },
+                description: "Chicken patty burger",
+                lowestPrice: 350
+            },
+            {
+                id: 91,
+                name: "Zinger Burger",
+                urduName: "زنگر برگر",
+                category: "fast-food",
+                options: {
+                    "Standard": 450
+                },
+                description: "Spicy zinger burger",
+                lowestPrice: 450
+            },
+            {
+                id: 92,
+                name: "Hayat Special Burger",
+                urduName: "حیات اسپیشل برگر",
+                category: "fast-food",
+                options: {
+                    "Standard": 550
+                },
+                description: "Special double patty burger",
+                lowestPrice: 550
+            },
+            {
+                id: 93,
+                name: "Loaded Burger",
+                urduName: "لوڈڈ برگر",
+                category: "fast-food",
+                options: {
+                    "Standard": 600
+                },
+                description: "Burger with extra toppings",
+                lowestPrice: 600
+            },
+            {
+                id: 94,
+                name: "Chicken Sandwich",
+                urduName: "مرغ سینڈوچ",
+                category: "fast-food",
+                options: {
+                    "Standard": 350
+                },
+                description: "Grilled chicken sandwich",
+                lowestPrice: 350
+            },
+            {
+                id: 95,
+                name: "Club Sandwich",
+                urduName: "کلَب سینڈوچ",
+                category: "fast-food",
+                options: {
+                    "Standard": 400
+                },
+                description: "Three layer club sandwich",
+                lowestPrice: 400
+            },
+            
+            // ==================== PIZZAS ====================
+            {
+                id: 96,
+                name: "Crown Crust Pizza",
+                urduName: "کراؤن کرَسٹ پیزا",
+                category: "pizzas",
+                options: {
+                    "Small": 750,
+                    "Medium": 1250,
+                    "Large": 1850
+                },
+                description: "Special crown crust pizza",
+                lowestPrice: 750
+            },
+            {
+                id: 97,
+                name: "Stuff Pizza",
+                urduName: "سٹف پیزا",
+                category: "pizzas",
+                options: {
+                    "Small": 750,
+                    "Medium": 1250,
+                    "Large": 1850
+                },
+                description: "Stuffed crust pizza (Kabab, Chicken, Cheese)",
+                lowestPrice: 750
+            },
+            {
+                id: 98,
+                name: "Pizza",
+                urduName: "پیزا",
+                category: "pizzas",
+                options: {
+                    "Small": 600,
+                    "Medium": 1100,
+                    "Large": 1700
+                },
+                description: "Regular pizza (Tikka, Malai Boti, Fajita)",
+                lowestPrice: 600
+            },
+            {
+                id: 99,
+                name: "3 Season Pizza",
+                urduName: "تھری سیزن پیزا",
+                category: "pizzas",
+                options: {
+                    "Small": 800,
+                    "Medium": 1400,
+                    "Large": 2000
+                },
+                description: "Three flavors pizza (Crown Crust, Stuff, Fajita)",
+                lowestPrice: 800
             }
         ];
 
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const YOUR_WHATSAPP_NUMBER = "1234567890"; // REPLACE with your restaurant's WhatsApp number
+        // Category configuration with icons
+        const categories = [
+            { id: "fav", name: "Favorites", icon: "fas fa-heart" },
+            { id: "pakistani", name: "Pakistani", icon: "fas fa-utensils" },
+            { id: "tandoor", name: "Tandoor", icon: "fas fa-fire" },
+            { id: "chinese", name: "Chinese", icon: "fas fa-utensil-spoon" },
+            { id: "sweets-salads", name: "Sweets & Salads", icon: "fas fa-ice-cream" },
+            { id: "bbq", name: "BBQ", icon: "fas fa-drumstick-bite" },
+            { id: "fast-food", name: "Fast Food", icon: "fas fa-hamburger" },
+            { id: "pizzas", name: "Pizzas", icon: "fas fa-pizza-slice" }
+        ];
 
-        // Initialize menu
-        function renderMenu(category = 'all') {
+        // State variables
+        let cart = JSON.parse(localStorage.getItem('hayat_cart')) || [];
+        let favorites = JSON.parse(localStorage.getItem('hayat_favorites')) || [];
+        let currentCategory = "pakistani";
+        let currentItemForOptions = null;
+        let selectedOption = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCategories();
+            renderMenu(currentCategory);
+            updateCartDisplay();
+            loadFavorites();
+            
+            // Event listeners for modal
+            document.getElementById('closeModal').addEventListener('click', closeOptionsModal);
+            document.getElementById('cancelOption').addEventListener('click', closeOptionsModal);
+            document.getElementById('confirmOption').addEventListener('click', confirmAddToCart);
+            
+            // Close modal on outside click
+            document.getElementById('optionsModal').addEventListener('click', function(e) {
+                if (e.target.id === 'optionsModal') {
+                    closeOptionsModal();
+                }
+            });
+        });
+
+        // Render categories
+        function renderCategories() {
+            const categoriesContainer = document.getElementById('categories');
+            categoriesContainer.innerHTML = '';
+            
+            categories.forEach(cat => {
+                const button = document.createElement('button');
+                button.className = `category-btn ${cat.id === currentCategory ? 'active' : ''}`;
+                button.innerHTML = `<i class="${cat.icon}"></i> ${cat.name}`;
+                button.dataset.category = cat.id;
+                button.addEventListener('click', () => switchCategory(cat.id));
+                categoriesContainer.appendChild(button);
+            });
+        }
+
+        // Switch category
+        function switchCategory(categoryId) {
+            currentCategory = categoryId;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === categoryId) {
+                    btn.classList.add('active');
+                }
+            });
+            renderMenu(categoryId);
+        }
+
+        // Load favorites
+        function loadFavorites() {
+            // Update favorites in menuData
+            menuData.forEach(item => {
+                item.isFavorite = favorites.includes(item.id);
+            });
+        }
+
+        // Toggle favorite
+        function toggleFavorite(itemId) {
+            const index = favorites.indexOf(itemId);
+            if (index === -1) {
+                favorites.push(itemId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            localStorage.setItem('hayat_favorites', JSON.stringify(favorites));
+            loadFavorites();
+            renderMenu(currentCategory);
+        }
+
+        // Render menu
+        function renderMenu(categoryId) {
             const menuGrid = document.getElementById('menuItems');
             menuGrid.innerHTML = '';
             
-            const filteredItems = category === 'all' 
-                ? menuData 
-                : menuData.filter(item => item.category === category);
+            let filteredItems;
+            
+            if (categoryId === "fav") {
+                filteredItems = menuData.filter(item => favorites.includes(item.id));
+                if (filteredItems.length === 0) {
+                    menuGrid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                            <i class="fas fa-heart" style="font-size: 3rem; color: #444; margin-bottom: 15px;"></i>
+                            <h3>No Favorite Items</h3>
+                            <p>Tap the <i class="fas fa-heart" style="color: var(--primary);"></i> icon on any item to add it here</p>
+                        </div>
+                    `;
+                    return;
+                }
+            } else {
+                filteredItems = menuData.filter(item => item.category === categoryId);
+            }
             
             filteredItems.forEach(item => {
-                const cartItem = cart.find(ci => ci.id === item.id);
-                const quantity = cartItem ? cartItem.quantity : 0;
-                
+                const isFavorite = favorites.includes(item.id);
                 const itemElement = document.createElement('div');
                 itemElement.className = 'menu-item';
+                
+                const optionsCount = item.options ? Object.keys(item.options).length : 0;
+                const hasMultipleOptions = optionsCount > 1;
+                
                 itemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="item-image">
-                    <div class="item-info">
-                        <h3 class="item-title">${item.name}</h3>
-                        <p>${item.description}</p>
-                        <div class="item-price">$${item.price.toFixed(2)}</div>
-                        <div class="quantity-controls">
-                            <button class="qty-btn minus" onclick="updateQuantity(${item.id}, -1)">-</button>
-                            <span id="qty-${item.id}">${quantity}</span>
-                            <button class="qty-btn plus" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    <div class="item-image-placeholder">
+                        <div class="item-icon">
+                            <i class="${categoryIcons[item.category] || 'fas fa-utensils'}"></i>
                         </div>
+                        <div>${item.category.toUpperCase()}</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-header">
+                            <div>
+                                <h3 class="item-title">${item.name}</h3>
+                                <div class="urdu-name">${item.urduName}</div>
+                            </div>
+                            <button class="favorite-btn ${isFavorite ? 'active' : ''}" 
+                                    onclick="toggleFavorite(${item.id})">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                        <p class="item-description">${item.description}</p>
+                        <div class="starting-price">
+                            Starting from: <span class="price">Rs. ${item.lowestPrice}</span>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="showOptions(${item.id})">
+                            <i class="fas fa-plus"></i> Add to Cart
+                        </button>
                     </div>
                 `;
                 menuGrid.appendChild(itemElement);
             });
         }
 
-        // Update cart quantity
-        function updateQuantity(itemId, change) {
-            const item = menuData.find(i => i.id === itemId);
-            let cartItem = cart.find(i => i.id === itemId);
+        // Show options modal
+        function showOptions(itemId) {
+            currentItemForOptions = menuData.find(item => item.id === itemId);
+            if (!currentItemForOptions) return;
             
-            if (!cartItem && change > 0) {
-                cartItem = { id: itemId, quantity: 0, ...item };
-                cart.push(cartItem);
-            }
+            selectedOption = null;
             
-            if (cartItem) {
-                cartItem.quantity += change;
+            document.getElementById('modalItemName').textContent = currentItemForOptions.name;
+            document.getElementById('modalUrduName').textContent = currentItemForOptions.urduName;
+            
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+            
+            const options = currentItemForOptions.options;
+            const optionEntries = Object.entries(options);
+            
+            optionEntries.forEach(([name, price], index) => {
+                const optionItem = document.createElement('div');
+                optionItem.className = 'option-item';
+                optionItem.dataset.optionName = name;
+                optionItem.dataset.price = price;
                 
-                if (cartItem.quantity <= 0) {
-                    cart = cart.filter(i => i.id !== itemId);
+                // Select first option by default
+                if (index === 0) {
+                    optionItem.classList.add('selected');
+                    selectedOption = { name, price };
                 }
+                
+                optionItem.innerHTML = `
+                    <div class="option-name">${name}</div>
+                    <div class="option-price">Rs. ${price}</div>
+                `;
+                
+                optionItem.addEventListener('click', function() {
+                    document.querySelectorAll('.option-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    selectedOption = {
+                        name: this.dataset.optionName,
+                        price: parseInt(this.dataset.price)
+                    };
+                });
+                
+                optionsList.appendChild(optionItem);
+            });
+            
+            document.getElementById('optionsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close options modal
+        function closeOptionsModal() {
+            document.getElementById('optionsModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentItemForOptions = null;
+            selectedOption = null;
+        }
+
+        // Confirm add to cart from modal
+        function confirmAddToCart() {
+            if (!currentItemForOptions || !selectedOption) return;
+            
+            // Check if item already in cart with same option
+            const existingIndex = cart.findIndex(ci => 
+                ci.id === currentItemForOptions.id && ci.optionName === selectedOption.name
+            );
+            
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += 1;
+            } else {
+                cart.push({
+                    id: currentItemForOptions.id,
+                    name: currentItemForOptions.name,
+                    urduName: currentItemForOptions.urduName,
+                    optionName: selectedOption.name,
+                    price: selectedOption.price,
+                    quantity: 1
+                });
             }
             
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('hayat_cart', JSON.stringify(cart));
             updateCartDisplay();
-            renderMenu(document.querySelector('.category-btn.active').dataset.category);
+            closeOptionsModal();
+            
+            // Show notification
+            showNotification(`${currentItemForOptions.name} (${selectedOption.name}) added to cart!`);
         }
 
         // Update cart display
@@ -380,84 +2163,177 @@
             
             cartItems.innerHTML = '';
             
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                itemCount += item.quantity;
-                
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                        <div>
-                            <strong>${item.name}</strong><br>
-                            <small>${item.quantity} x $${item.price.toFixed(2)}</small>
-                        </div>
-                        <div style="font-weight: bold;">
-                            $${itemTotal.toFixed(2)}
-                        </div>
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add items from the menu to get started</p>
                     </div>
                 `;
-                cartItems.appendChild(cartItem);
-            });
+            } else {
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    itemCount += item.quantity;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-header">
+                            <div>
+                                <div class="cart-item-name">${item.name}</div>
+                                <div class="cart-item-options">${item.optionName !== "Standard" ? item.optionName : ""}</div>
+                            </div>
+                            <div class="cart-item-price">Rs. ${itemTotal}</div>
+                        </div>
+                        <div class="cart-item-footer">
+                            <div>Rs. ${item.price} each</div>
+                            <div class="cart-item-actions">
+                                <button class="cart-qty-btn" onclick="updateCartQuantity(${index}, -1)">-</button>
+                                <span style="margin: 0 10px; font-weight: 600;">${item.quantity}</span>
+                                <button class="cart-qty-btn" onclick="updateCartQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+            }
             
-            totalAmount.textContent = total.toFixed(2);
+            totalAmount.textContent = total;
             cartCount.textContent = itemCount;
+        }
+
+        // Update cart quantity
+        function updateCartQuantity(index, change) {
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            localStorage.setItem('hayat_cart', JSON.stringify(cart));
+            updateCartDisplay();
         }
 
         // Submit order via WhatsApp
         function submitOrder() {
             if (cart.length === 0) {
-                alert('Your cart is empty!');
+                showNotification("Your cart is empty!", "error");
                 return;
             }
             
-            let message = `*NEW ORDER REQUEST*%0A%0A`;
-            let total = 0;
+            const customerName = document.getElementById('customerName').value.trim();
+            const roomNumber = document.getElementById('roomNumber').value.trim();
+            const specialInstructions = document.getElementById('specialInstructions').value.trim();
             
+            if (!customerName || !roomNumber) {
+                showNotification("Please enter your name and room/table number!", "error");
+                return;
+            }
+            
+            let message = `*NEW ORDER - HAYAT HOTEL & RESTAURANT*%0A%0A`;
+            message += `*Customer:* ${customerName}%0A`;
+            message += `*Room/Table:* ${roomNumber}%0A`;
+            message += `*WhatsApp:* +923219746660%0A`;
+            
+            if (specialInstructions) {
+                message += `*Instructions:* ${specialInstructions}%0A`;
+            }
+            
+            message += `%0A*Order Details:*%0A`;
+            
+            let total = 0;
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                message += `${index + 1}. ${item.name} - ${item.quantity} x $${item.price} = $${itemTotal.toFixed(2)}%0A`;
+                const optionText = item.optionName !== "Standard" ? ` (${item.optionName})` : "";
+                message += `${index + 1}. ${item.name}${optionText} - ${item.quantity} x Rs. ${item.price} = Rs. ${itemTotal}%0A`;
             });
             
-            message += `%0A*Total: $${total.toFixed(2)}*%0A%0A`;
-            message += `Customer Name: [Please Enter]%0A`;
-            message += `Table Number: [Please Enter]%0A`;
-            message += `Special Instructions: [Any requests?]`;
+            message += `%0A*Total Amount:* Rs. ${total}%0A`;
+            message += `%0A*Order Time:* ${new Date().toLocaleString()}%0A`;
+            message += `%0A*Address:* Saboon Chock, Mela Ground, Hayat Tower%0A`;
+            message += `%0A_Please confirm this order and provide estimated delivery time._`;
             
-            const whatsappURL = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${message}`;
+            const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
             window.open(whatsappURL, '_blank');
             
-            // Clear cart after submission
+            // Clear cart after successful submission
             cart = [];
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('hayat_cart', JSON.stringify(cart));
             updateCartDisplay();
-            renderMenu(document.querySelector('.category-btn.active').dataset.category);
             
-            alert('Order submitted! You will be redirected to WhatsApp.');
+            // Clear form
+            document.getElementById('customerName').value = '';
+            document.getElementById('roomNumber').value = '';
+            document.getElementById('specialInstructions').value = '';
+            
+            showNotification("Order submitted! Opening WhatsApp...", "success");
         }
 
-        // Event Listeners
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                renderMenu(btn.dataset.category);
-            });
+        // Show notification
+        function showNotification(message, type = "success") {
+            // Remove existing notification
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#ef4444' : '#10b981'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations for notification
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Cart toggle functions
+        document.getElementById('cartToggle').addEventListener('click', () => {
+            document.getElementById('cartSidebar').classList.add('active');
         });
 
-        document.getElementById('cartToggle').addEventListener('click', () => {
-            document.getElementById('cartSidebar').classList.toggle('active');
+        document.getElementById('closeCart').addEventListener('click', () => {
+            document.getElementById('cartSidebar').classList.remove('active');
         });
 
         document.getElementById('submitOrder').addEventListener('click', submitOrder);
 
-        // Initialize
-        renderMenu();
-        updateCartDisplay();
-
-        // Close cart when clicking outside
+        // Close cart when clicking outside (for mobile)
         document.addEventListener('click', (e) => {
             const cartSidebar = document.getElementById('cartSidebar');
             const cartToggle = document.getElementById('cartToggle');
@@ -466,6 +2342,11 @@
                 cartSidebar.classList.remove('active');
             }
         });
+
+        // Make functions available globally
+        window.toggleFavorite = toggleFavorite;
+        window.showOptions = showOptions;
+        window.updateCartQuantity = updateCartQuantity;
     </script>
 </body>
 </html>
